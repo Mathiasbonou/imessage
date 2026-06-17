@@ -17,16 +17,18 @@ app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(express.json());
 app.use(clerkMiddleware());
 
+
+
+app.get("/health", (req, res) => {
+    res.status(200).json({ ok: true });
+});
+
 if (fs.existsSync(publicDir)) {
     app.get("/{*any}", (req, res, next) => {
         res.sendFile(path.join(publicDir, 'index.html'), (err) => next(err));
     })
 }
 
-
-app.get("/health", (req, res) => {
-    res.status(200).json({ ok: true });
-});
 
 app.listen(PORT, () => {
     console.log(`Serveur lancé sur le port ${PORT}`)
