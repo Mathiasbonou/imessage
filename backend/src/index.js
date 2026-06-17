@@ -6,6 +6,7 @@ import { clerkMiddleware } from '@clerk/express'
 import cors from 'cors';
 import path from 'path';
 import fs from "fs"
+import job from "./lib/cron.js";
 
 const app = express();
 const PORT = process.env.PORT;
@@ -31,6 +32,7 @@ app.get("/{*any}", (req, res, next) => {
 
 
 app.listen(PORT, () => {
-    console.log(`Serveur lancé sur le port ${PORT}`)
     connectDB();
+    console.log(`Serveur lancé sur le port ${PORT}`)
+    if (process.env.NODE_ENV === "production") job.start()
 })
