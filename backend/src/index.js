@@ -1,4 +1,4 @@
-import express from "express";
+import express, { raw } from "express";
 import "dotenv/config"
 import connectDB from "./lib/db.js";
 import User from "./models/user.model.js";
@@ -7,12 +7,15 @@ import cors from 'cors';
 import path from 'path';
 import fs from "fs"
 import job from "./lib/cron.js";
+import clerkWebhook from "./webhooks/clerk.webhook.js"
 
 const app = express();
 const PORT = process.env.PORT;
 const FRONTEND_URL = process.env.FRONTEND_URL;
 
 const publicDir = path.join(process.cwd(), 'public');
+
+app.use("/api/webhook/clerk", express, raw({ type: "application/json" }), clerkWebhook);
 
 app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(express.json());
